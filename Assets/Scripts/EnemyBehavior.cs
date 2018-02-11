@@ -5,10 +5,14 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour 
 {
 	[Header("References")]
-	GameObject explosionPrefab;
-	GameObject shootPrefab;
-	AudioClip explosionSFX;
-	AudioClip shootSFX;
+	public GameObject explosionPrefab;
+	public GameObject shootPrefab;
+	public GameObject impactPrefab;
+	public AudioClip explosionSFX;
+	public AudioClip shootSFX;
+	public Transform gun1;
+	public Transform gun2;
+	public ParticleSystem smokeFX;
 
 
 	[Header("Balancing")]
@@ -19,10 +23,11 @@ public class EnemyBehavior : MonoBehaviour
 	public float movementSpeed = 4f;
 	public float rotationSpeed = 1f;
 	public int healthPoints = 3;
+	public float shootCooldown = 3f;
+	public float fallingTime = 2f;
 
 
-
-
+	[Header("Private")]
 	private PlayerController player;
 	private Rigidbody rb;
 	private float distanceFromPlayer = 0;
@@ -30,19 +35,26 @@ public class EnemyBehavior : MonoBehaviour
 	private Vector3 destination = Vector3.zero;
 	private bool stopMoving = false;
 	private float originalDrag = 0;
-	
+	private float shootCurrentCooldown = 0f;
+	private AudioSource audioSource;
+	private bool isDead = false;
 
 	// Use this for initialization
 	void Start () 
 	{
 		player = PlayerController.Instance;
 		rb = GetComponent<Rigidbody>();	
+		audioSource = GetComponent<AudioSource>();
 		originalDrag = rb.drag;
+		shootCurrentCooldown = shootCooldown;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
+		if ( isDead )
+			return;
+
 		distanceFromPlayer = Vector3.Distance( transform.position, player.transform.position );
 		Debug.DrawLine( transform.position, destination, Color.red );
 
@@ -76,6 +88,9 @@ public class EnemyBehavior : MonoBehaviour
 	//to make it move at 4m/s I should have use transform.Translate(forward * speed * Time.deltaTime)
 	void FixedUpdate()
 	{
+		if ( isDead )
+			return;
+
 		if ( stopMoving )
 		{
 			rb.drag = 10f;
@@ -118,7 +133,17 @@ public class EnemyBehavior : MonoBehaviour
 	void ShootAtPlayer()
 	{
 		SmoothLookAt( player.transform.position );
-		Debug.Log("pew pew");
+		if ( shootCurrentCooldown <= 0 )
+		{
+			shootCurrentCooldown = shootCooldown;
+			audioSource.PlayOneShot( shootSFX );
+			GameObject.Instantiate( shootPrefab, gun1.transform.position, gun1.transform.rotation );
+			GameObject.Instantiate( shootPrefab, gun2.transform.position, gun2.transform.rotation );
+		}
+		else
+		{
+			shootCurrentCooldown -= Time.deltaTime;
+		}
 	}
 
 	void SmoothLookAt(Vector3 target)
@@ -133,17 +158,43 @@ public class EnemyBehavior : MonoBehaviour
 		healthPoints--;
 		if ( healthPoints <= 0 )
 		{
-			Die();
+			Fall();
 		}
+	}
+
+	[ContextMenu ("Fall")] //to test in editor easily
+	void Fall()
+	{
+		rb.drag = 0;
+		rb.AddTorque(Random.insideUnitSphere * 500f, ForceMode.Impulse);
+		rb.useGravity = true;
+		isDead = true;
+		smokeFX.Play();
+		Invoke("Die", fallingTime);
 	}
 
 	public void Die()
 	{
+		smokeFX.transform.parent = null;
 		GameObject.Instantiate( explosionPrefab, transform.position, Quaternion.identity );
+		Destroy(gameObject);
 	}
 
 	void OnDestroy()
 	{		
 		SpawnManager.Instance.RemoveEnemy( this );
+	}
+
+	void OnCollisionEnter(Collision collisionInfo)
+	{
+		if ( collisionInfo.collider.CompareTag("Bullet") )
+		{
+			Hit();
+			GameObject i = Instantiate( impactPrefab, collisionInfo.contacts[0].point, Quaternion.identity );
+			Vector3 pointToLook = collisionInfo.contacts[0].point - collisionInfo.contacts[0].normal;
+			i.transform.LookAt( pointToLook );
+			i.transform.parent = transform;
+			Destroy( collisionInfo.gameObject );
+		}		
 	}
 }

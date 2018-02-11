@@ -71,7 +71,7 @@ public class SpawnManager : MonoBehaviour
 		//find the nearest distance, and remove the associate spawner
 		for(int i = 0; i < distances.Count; i++)
 		{
-			Spawner myKey = spawnersByDistance.FirstOrDefault( x => x.Value == distances[i] ).Key;
+			Spawner myKey = spawnersByDistance.FirstOrDefault( x => x.Value == distances[i] ).Key; // this is not exact if there are equal distances
 			spawnersByDistance.Remove(myKey);
 		}
 
@@ -100,10 +100,12 @@ public class SpawnManager : MonoBehaviour
 
 		GameObject e = GameObject.Instantiate( enemyPrefab, rightSpawner.transform.position, rightSpawner.transform.rotation );
 		enemiesList.Add( e.GetComponent<EnemyBehavior>() );
+		Radar.Instance.AddEnemy( e );
 	}
 
 	public void RemoveEnemy( EnemyBehavior e )
 	{
 		enemiesList.Remove(e);
+		Radar.Instance.RemoveEnemy( e.gameObject );
 	}
 }

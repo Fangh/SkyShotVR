@@ -18,7 +18,17 @@ public class PlayerController : MonoBehaviour
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		
+	}
+
+	void OnTriggerEnter(Collider other)
+	{
+		if( other.CompareTag("Bullet") )
+		{
+			Debug.Log("ouch !");
+			Destroy( other.gameObject );
+		}
 	}
 }
