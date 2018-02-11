@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
 	{
 		if( other.CompareTag("Bullet") )
 		{
+			Radar.Instance.OnHit( other.GetComponent<Bullet>().myOwner.transform );
 			Debug.Log("ouch !");
 			Destroy( other.gameObject );
 		}

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Radar : MonoBehaviour 
 {
@@ -46,6 +47,15 @@ public class Radar : MonoBehaviour
 		}
 	}
 
+	public void OnHit(Transform e)
+	{
+		Vector3 relativePos = e.position - PlayerController.Instance.transform.position;
+		hitSprite.transform.LookAt(hitSprite.transform.position + relativePos);
+		// Debug.DrawLine(hitSprite.transform.position, hitSprite.transform.position + relativePos, Color.yellow, 1f);
+		hitSprite.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+		hitSprite.GetComponentInChildren<SpriteRenderer>().DOFade(0,2f);
+	}
+
 	public void AddEnemy( GameObject e )
 	{
 		GameObject s = Instantiate( enemySpritePrefab, transform.position, Quaternion.identity );
@@ -54,20 +64,18 @@ public class Radar : MonoBehaviour
 		s.transform.parent = transform;
 	}
 	
-	private GameObject enemyToRemove = null;
 	public void RemoveEnemy( GameObject e )
 	{
-		Debug.Log("trying to remove " + e.name, e );
-		enemyToRemove = e;
+		// Debug.Log("trying to remove " + e.name, e );
 		GameObject o = FindEnemySpriteByID( e.GetInstanceID().ToString() );
-		Debug.Log("I found " + o.name, o);
+		// Debug.Log("I found " + o.name, o);
 		enemiesSpritesList.Remove( o );
 		Destroy( o );
 	}
 
 	GameObject FindEnemySpriteByID(string id)
 	{
-		Debug.Log("trying to find an object called " + id);
+		// Debug.Log("trying to find an object called " + id);
 		foreach (GameObject o in enemiesSpritesList)
 		{
 			if (o.name == id)

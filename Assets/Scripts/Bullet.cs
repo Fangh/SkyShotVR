@@ -8,6 +8,9 @@ public class Bullet : MonoBehaviour
 	public float autoDestroyTime = 0.2f; //0.2 at 100m/s = 20m max
 	public float speed = 100f; //100m/s
 
+	[Header("Private")]
+	public GameObject myOwner;
+
 	// Use this for initialization
 	void Start () 
 	{

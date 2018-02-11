@@ -137,8 +137,10 @@ public class EnemyBehavior : MonoBehaviour
 		{
 			shootCurrentCooldown = shootCooldown;
 			audioSource.PlayOneShot( shootSFX );
-			GameObject.Instantiate( shootPrefab, gun1.transform.position, gun1.transform.rotation );
-			GameObject.Instantiate( shootPrefab, gun2.transform.position, gun2.transform.rotation );
+			GameObject s1 =Instantiate( shootPrefab, gun1.transform.position, gun1.transform.rotation );
+			GameObject s2 =Instantiate( shootPrefab, gun2.transform.position, gun2.transform.rotation );
+			s1.GetComponent<Bullet>().myOwner = gameObject;
+			s2.GetComponent<Bullet>().myOwner = gameObject;
 		}
 		else
 		{

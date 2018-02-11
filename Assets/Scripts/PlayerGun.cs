@@ -64,6 +64,7 @@ public class PlayerGun : MonoBehaviour
 		canShoot = false;
 		GameObject b = Instantiate( bulletPrefab, shootPos.position, shootPos.rotation );
 		b.GetComponent<TrailRenderer>().startColor = Color.red;
+		b.GetComponent<Bullet>().myOwner = gameObject;
 		shootPos.GetComponent<ParticleSystem>().Play();
 	}
 }
