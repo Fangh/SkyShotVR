@@ -10,6 +10,7 @@ public class PlayerGun : MonoBehaviour
 	public AudioClip shotSFX;
 	public AudioClip dryShotSFX;
 	public AudioClip reloadSFX;
+	public GameObject magazine;
 	
 	[Header("Balancing")]
 	public float shootCooldown = 0.08f;
@@ -54,11 +55,13 @@ public class PlayerGun : MonoBehaviour
 		{
 			audioSource.PlayOneShot( reloadSFX );
 			magazineContent = magazineSize;
+			magazine.transform.localScale = Vector3.one;
 		}
 	}
 
 	void Shoot()
 	{
+		magazine.transform.localScale -= Vector3.up / magazineSize;
 		magazineContent --;
 		audioSource.PlayOneShot( shotSFX );
 		canShoot = false;
