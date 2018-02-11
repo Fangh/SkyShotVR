@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnnemiBehavior : MonoBehaviour 
+public class EnemyBehavior : MonoBehaviour 
 {
-	PlayerController player;
-	Rigidbody rb;
-	float distanceFromPlayer = 0;
-	bool playerIsLocked = false;
-	Vector3 destination = Vector3.zero;
-	bool stopMoving = false;
-	float originalDrag = 0;
-	
+	[Header("References")]
+	GameObject explosionPrefab;
+	GameObject shootPrefab;
+	AudioClip explosionSFX;
+	AudioClip shootSFX;
+
 
 	[Header("Balancing")]
 	public float distanceMaxFromPlayer = 30f;
@@ -20,6 +18,19 @@ public class EnnemiBehavior : MonoBehaviour
 	public float distanceToLockPlayer = 10f;
 	public float movementSpeed = 4f;
 	public float rotationSpeed = 1f;
+	public int healthPoints = 3;
+
+
+
+
+	private PlayerController player;
+	private Rigidbody rb;
+	private float distanceFromPlayer = 0;
+	private bool playerIsLocked = false;
+	private Vector3 destination = Vector3.zero;
+	private bool stopMoving = false;
+	private float originalDrag = 0;
+	
 
 	// Use this for initialization
 	void Start () 
@@ -33,24 +44,24 @@ public class EnnemiBehavior : MonoBehaviour
 	void Update () 
 	{
 		distanceFromPlayer = Vector3.Distance( transform.position, player.transform.position );
-		Debug.DrawLine( player.transform.position, destination, Color.red, 1f );
+		Debug.DrawLine( transform.position, destination, Color.red );
 
 		//if you are far from player, move freely
 		if ( distanceFromPlayer > distanceToLockPlayer && !playerIsLocked )
 		{
-			Debug.Log("[Ennemi] Moving around", this);
+			// Debug.Log("[Ennemi] Moving around", this);
 			MoveAround();
 		}
 		//if you are near player, go toward them.
 		else if ( distanceFromPlayer > distanceMinFromPlayer )
 		{
-			Debug.Log("[Ennemi] Locking Player", this);
+			// Debug.Log("[Ennemi] Locking Player", this);
 			//lookatPlayerAnd go toward them. And don't move freely ever again
 			LockPlayer();
 		}
 		else
 		{
-			Debug.Log("[Ennemi] Stop Moving", this);
+			// Debug.Log("[Ennemi] Stop Moving", this);
 			// Debug.Log( "distanceFromPlayer = " + distanceFromPlayer );
 			stopMoving = true;
 		}
@@ -74,7 +85,7 @@ public class EnnemiBehavior : MonoBehaviour
 			rb.drag = originalDrag;
 			if ( destination != Vector3.zero)
 			{
-				Debug.Log("[Ennemi] moving toward destination", this);
+				// Debug.Log("[Ennemi] moving toward destination", this);
 				rb.AddRelativeForce( Vector3.forward * movementSpeed );
 			}
 		}
@@ -113,7 +124,26 @@ public class EnnemiBehavior : MonoBehaviour
 	void SmoothLookAt(Vector3 target)
 	{
 		Vector3 relativePos = target - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(relativePos);
-		transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * rotationSpeed);
+        Quaternion rotation = Quaternion.LookRotation( relativePos );
+		transform.rotation = Quaternion.Slerp( transform.rotation, rotation, Time.deltaTime * rotationSpeed );
+	}
+
+	public void Hit()
+	{
+		healthPoints--;
+		if ( healthPoints <= 0 )
+		{
+			Die();
+		}
+	}
+
+	public void Die()
+	{
+		GameObject.Instantiate( explosionPrefab, transform.position, Quaternion.identity );
+	}
+
+	void OnDestroy()
+	{		
+		SpawnManager.Instance.RemoveEnemy( this );
 	}
 }

@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 54197334356196316}
   - component: {fileID: 114516577408166284}
   m_Layer: 0
-  m_Name: Ennemi1
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -52,7 +52,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1036664836657736}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2.52, y: 3.46, z: 11.92}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4666174383448400}
@@ -147,3 +147,4 @@ MonoBehaviour:
   distanceToLockPlayer: 10
   movementSpeed: 4
   rotationSpeed: 1
+  healthPoints: 3
