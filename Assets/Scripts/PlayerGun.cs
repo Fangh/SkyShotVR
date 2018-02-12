@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class PlayerGun : MonoBehaviour 
 {
@@ -11,6 +12,8 @@ public class PlayerGun : MonoBehaviour
 	public AudioClip dryShotSFX;
 	public AudioClip reloadSFX;
 	public GameObject magazine;
+	public Transform orderPos;
+	public OvrAvatar ovrAvatar;
 	
 	[Header("Balancing")]
 	public float shootCooldown = 0.08f;
@@ -22,6 +25,10 @@ public class PlayerGun : MonoBehaviour
 	private bool canShoot = false;
 	private AudioSource audioSource;
 	private int magazineContent = 0;
+	private bool isGrabbed = false;
+	private bool isInOrder = true;
+
+	private Tween orderTween;
 
 	// Use this for initialization
 	void Start () 
@@ -34,7 +41,7 @@ public class PlayerGun : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if (shootCurrentCooldown <= 0)
+		if ( shootCurrentCooldown <= 0 )
 		{
 			shootCurrentCooldown = shootCooldown;
 			canShoot = true;
@@ -42,21 +49,61 @@ public class PlayerGun : MonoBehaviour
 		else
 			shootCurrentCooldown -= Time.deltaTime;
 
-		if (Input.GetMouseButton(0) && canShoot) // you can stay clicked to shoot quickly
+		if ( isGrabbed 
+		&& OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger, OVRInput.Controller.Touch) > 0.8f 
+		&& canShoot ) // you can stay clicked to shoot quickly
 		{
 			if ( magazineContent > 0)
 				Shoot();
+			else
+			{
+				audioSource.clip = dryShotSFX;
+				audioSource.Play();
+			}
 		}
-		if (Input.GetMouseButtonDown(0) && magazineContent <= 0) //play dry shot only at each click
-		{
-			audioSource.PlayOneShot( dryShotSFX );
-		}
-		if ( Input.GetKeyDown( KeyCode.R ) && !Input.GetMouseButton(0) ) //can reload but not when shooting
+		if ( OVRInput.GetDown(OVRInput.Button.One) 
+		&& OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger, OVRInput.Controller.Touch) < 0.1f
+		&& isGrabbed ) //can reload but not when shooting
 		{
 			audioSource.PlayOneShot( reloadSFX );
 			magazineContent = magazineSize;
 			magazine.transform.localScale = Vector3.one;
 		}
+
+
+		if ( !isGrabbed && !isInOrder && ( null == orderTween || !orderTween.IsActive() ) )
+		{
+			orderTween = transform.DOMove( orderPos.position, 1f ).OnComplete( IsInOrder );
+			transform.DORotateQuaternion( orderPos.rotation, 1f );
+			GetComponent<OVRGrabbable>().enabled = false;
+		}
+		if ( isInOrder )
+		{
+			transform.position = orderPos.position;
+		}
+		// if ( isGrabbed )
+		// {
+		// 	transform.rotation = ovrAvatar.HandRight.transform.rotation;
+		// }
+	}
+
+	void IsInOrder()
+	{
+		isInOrder = true;
+		GetComponent<OVRGrabbable>().enabled = true;
+	}
+
+	public void GrabEnd()
+	{
+		ovrAvatar.HandRight.gameObject.SetActive(true);
+		isGrabbed = false;
+	}
+
+	public void GrabBegin()
+	{
+		ovrAvatar.HandRight.gameObject.SetActive(false);
+		isGrabbed = true;
+		isInOrder = false;
 	}
 
 	void Shoot()

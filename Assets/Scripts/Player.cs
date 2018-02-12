@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour 
+public class Player : MonoBehaviour 
 {
-	public static PlayerController Instance;
+	[Header("References")]
+	public Transform attachTo;
 
-	PlayerController()
+	[Header("Private")]
+	public static Player Instance;
+
+	Player()
 	{
 		Instance = this;
 	}
@@ -20,7 +24,7 @@ public class PlayerController : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		
+		transform.position = attachTo.position;
 	}
 
 	void OnTriggerEnter(Collider other)

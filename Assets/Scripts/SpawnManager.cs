@@ -88,7 +88,7 @@ public class SpawnManager : MonoBehaviour
 		foreach(var s in spawnersByDistance)
 		{
 			//taking only the spawner wich is nearer the player;
-			float distance = Vector3.Distance(s.Key.transform.position, PlayerController.Instance.transform.position);
+			float distance = Vector3.Distance(s.Key.transform.position, Player.Instance.transform.position);
 			if ( distance < distanceFromPlayer)
 			{
 				distanceFromPlayer = distance;

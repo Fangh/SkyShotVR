@@ -28,7 +28,7 @@ public class EnemyBehavior : MonoBehaviour
 
 
 	[Header("Private")]
-	private PlayerController player;
+	private Player player;
 	private Rigidbody rb;
 	private float distanceFromPlayer = 0;
 	private bool playerIsLocked = false;
@@ -42,7 +42,7 @@ public class EnemyBehavior : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		player = PlayerController.Instance;
+		player = Player.Instance;
 		rb = GetComponent<Rigidbody>();	
 		audioSource = GetComponent<AudioSource>();
 		originalDrag = rb.drag;
