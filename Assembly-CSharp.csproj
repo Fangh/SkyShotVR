@@ -238,10 +238,14 @@
      <Compile Include="Assets\OvrAvatar\Scripts\OvrAvatarSkinnedMeshRenderComponent.cs" />
      <Compile Include="Assets\OvrAvatar\Scripts\OvrAvatarSkinnedMeshRenderPBSComponent.cs" />
      <Compile Include="Assets\OvrAvatar\Scripts\OvrAvatarTouchController.cs" />
+     <Compile Include="Assets\Scripts\BackPack.cs" />
      <Compile Include="Assets\Scripts\Bullet.cs" />
+     <Compile Include="Assets\Scripts\Cloud.cs" />
+     <Compile Include="Assets\Scripts\CloudGenerator.cs" />
      <Compile Include="Assets\Scripts\EnemyBehavior.cs" />
-     <Compile Include="Assets\Scripts\Player.cs" />
+     <Compile Include="Assets\Scripts\Lever.cs" />
      <Compile Include="Assets\Scripts\PlayerGun.cs" />
+     <Compile Include="Assets\Scripts\PlayerMovement.cs" />
      <Compile Include="Assets\Scripts\Radar.cs" />
      <Compile Include="Assets\Scripts\Spawner.cs" />
      <Compile Include="Assets\Scripts\SpawnManager.cs" />

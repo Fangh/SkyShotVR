@@ -35,7 +35,7 @@ public class Radar : MonoBehaviour
 			if (null == enemiesSpritesList[i])
 				return;
 
-			Vector3 relativePos = SM.enemiesList[i].transform.position - Player.Instance.transform.position;
+			Vector3 relativePos = SM.enemiesList[i].transform.position - BackPack.Instance.transform.position;
 			// relativePos.Normalize();
 			// Debug.Log( "relative pos = " + relativePos );
 			relativePos *= 0.0008f;
@@ -49,7 +49,7 @@ public class Radar : MonoBehaviour
 
 	public void OnHit(Transform e)
 	{
-		Vector3 relativePos = e.position - Player.Instance.transform.position;
+		Vector3 relativePos = e.position - BackPack.Instance.transform.position;
 		hitSprite.transform.LookAt(hitSprite.transform.position + relativePos);
 		// Debug.DrawLine(hitSprite.transform.position, hitSprite.transform.position + relativePos, Color.yellow, 1f);
 		hitSprite.GetComponentInChildren<SpriteRenderer>().color = Color.white;

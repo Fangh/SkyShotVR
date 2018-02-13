@@ -61,7 +61,7 @@ public class PlayerGun : MonoBehaviour
 				audioSource.Play();
 			}
 		}
-		if ( OVRInput.GetDown(OVRInput.Button.One) 
+		if ( OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch) 
 		&& OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger, OVRInput.Controller.Touch) < 0.1f
 		&& isGrabbed ) //can reload but not when shooting
 		{
@@ -80,6 +80,7 @@ public class PlayerGun : MonoBehaviour
 		if ( isInOrder )
 		{
 			transform.position = orderPos.position;
+			transform.rotation = orderPos.rotation;
 		}
 		// if ( isGrabbed )
 		// {
