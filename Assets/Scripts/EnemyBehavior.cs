@@ -13,6 +13,7 @@ public class EnemyBehavior : MonoBehaviour
 	public Transform gun1;
 	public Transform gun2;
 	public ParticleSystem smokeFX;
+	public GameObject flame;
 
 
 	[Header("Balancing")]
@@ -94,9 +95,13 @@ public class EnemyBehavior : MonoBehaviour
 		if ( stopMoving )
 		{
 			rb.drag = 10f;
+			if( flame.activeSelf )
+				flame.SetActive(false);
 		}
 		else
 		{
+			if( !flame.activeSelf )
+				flame.SetActive(true);
 			rb.drag = originalDrag;
 			if ( destination != Vector3.zero)
 			{
