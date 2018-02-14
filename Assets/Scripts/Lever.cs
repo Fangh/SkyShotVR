@@ -16,6 +16,7 @@ public class Lever : MonoBehaviour
 	private bool isGrabbed = false;
 	private bool canBeGrabbed = false;
 	private Quaternion originalRot;
+	private Tween returnAtOrigin;
 
 	// Use this for initialization
 	void Start () 
@@ -54,7 +55,8 @@ public class Lever : MonoBehaviour
 
 	void OnTriggerEnter(Collider other)
 	{
-		if ( other.CompareTag("Player") )
+		if ( other.CompareTag("Player") 
+		&& ( null == returnAtOrigin || !returnAtOrigin.IsPlaying() ))
 		{
 			canBeGrabbed = true;
 		}		
@@ -65,16 +67,13 @@ public class Lever : MonoBehaviour
 		if ( other.CompareTag("Player") )
 		{
 			canBeGrabbed = false;
-
-			if (isGrabbed)
-				UnGrab();
 		}
 	}
 
 	void UnGrab()
 	{
 		isGrabbed = false;
-		transform.DOLocalRotateQuaternion(originalRot, 1f);
+		returnAtOrigin = transform.DOLocalRotateQuaternion(originalRot, 1f);
 		ovrAvatar.LeftHandCustomPose = null;
 	}
 
@@ -93,5 +92,10 @@ public class Lever : MonoBehaviour
 		if ( x > 180)
 			x -= 360;
 		return (x / maxAngle);
+	}
+
+	public bool IsGrabbed()
+	{
+		return isGrabbed;
 	}
 }

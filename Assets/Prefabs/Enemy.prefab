@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 54197334356196316}
   - component: {fileID: 114516577408166284}
   - component: {fileID: 82170750892693082}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 4899548356481092}
   - component: {fileID: 198277130842595532}
   - component: {fileID: 199355940365346354}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FX_Smoke
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4483848859367282}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Gun1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 33483898789498360}
   - component: {fileID: 23153560198396644}
   - component: {fileID: 64062461664618844}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   - component: {fileID: 95179155089628502}
   - component: {fileID: 96810548299564938}
   - component: {fileID: 82867986131615266}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Flame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -107,7 +107,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4504561055851310}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Gun2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -597,6 +597,7 @@ MonoBehaviour:
   gun2: {fileID: 4504561055851310}
   smokeFX: {fileID: 198277130842595532}
   flame: {fileID: 1890432966123262}
+  bulletMask: EnemiesBullet
   distanceMaxFromPlayer: 60
   distanceMinFromPlayer: 6
   distanceToShotPlayer: 10

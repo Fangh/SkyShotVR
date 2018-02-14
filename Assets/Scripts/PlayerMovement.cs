@@ -30,7 +30,8 @@ public class PlayerMovement : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if( OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.LTouch) || Input.GetKey(KeyCode.UpArrow)  )
+		// if( OVRInput.Get(OVRInput.Button.One, OVRInput.Controller.LTouch) || Input.GetKey(KeyCode.UpArrow)  ) //before I choosed to move with left A button
+		if (lever.IsGrabbed())
 		{
 			currentSpeed = Mathf.Lerp( currentSpeed, movementSpeed, Time.deltaTime );
 			if( audioSource.volume != 0.5f)
@@ -63,7 +64,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			if (particleLeft.isStopped )
 			{
-				particleLeft.GetComponent<AudioSource>().DOFade(0.5f, 1);
+				particleLeft.GetComponent<AudioSource>().DOFade(0.2f, 1);
 				particleRight.GetComponent<AudioSource>().DOFade(0f, 1);
 				particleLeft.Play();
 				particleRight.Stop();
@@ -73,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			if ( particleRight.isStopped )
 			{
-				particleRight.GetComponent<AudioSource>().DOFade(0.5f, 1);
+				particleRight.GetComponent<AudioSource>().DOFade(0.2f, 1);
 				particleLeft.GetComponent<AudioSource>().DOFade(0f, 1);
 				particleRight.Play();
 				particleLeft.Stop();
@@ -93,13 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
 		// Debug.Log("currentRotation = " + transform.rotation.eulerAngles);
 		Vector3 newRotation = transform.rotation.eulerAngles;
-		if(x == 0)
-		{
-			newRotation.x = Mathf.Lerp( newRotation.x, 0, Time.deltaTime * smoothReset );
-		}
-		else
-			newRotation.x += x * rotationSpeed * Time.deltaTime;
-
+		newRotation.x += x * rotationSpeed * Time.deltaTime;
 		newRotation.y += y * rotationSpeed * Time.deltaTime;
 
 

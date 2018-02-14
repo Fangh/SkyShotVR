@@ -14,6 +14,7 @@ public class PlayerGun : MonoBehaviour
 	public GameObject magazine;
 	public Transform orderPos;
 	public OvrAvatar ovrAvatar;
+	public string bulletMask;
 	
 	[Header("Balancing")]
 	public float shootCooldown = 0.08f;
@@ -70,22 +71,26 @@ public class PlayerGun : MonoBehaviour
 			magazine.transform.localScale = Vector3.one;
 		}
 
-
+		//when ungrab go to original pos
 		if ( !isGrabbed && !isInOrder && ( null == orderTween || !orderTween.IsActive() ) )
 		{
 			orderTween = transform.DOMove( orderPos.position, 1f ).OnComplete( IsInOrder );
 			transform.DORotateQuaternion( orderPos.rotation, 1f );
 			GetComponent<OVRGrabbable>().enabled = false;
 		}
+		// if ( isGrabbed )
+		// {
+		// 	transform.rotation = ovrAvatar.HandRight.transform.rotation;
+		// }
+	}
+
+	void LateUpdate()
+	{		
 		if ( isInOrder )
 		{
 			transform.position = orderPos.position;
 			transform.rotation = orderPos.rotation;
 		}
-		// if ( isGrabbed )
-		// {
-		// 	transform.rotation = ovrAvatar.HandRight.transform.rotation;
-		// }
 	}
 
 	void IsInOrder()
@@ -98,6 +103,7 @@ public class PlayerGun : MonoBehaviour
 	{
 		ovrAvatar.HandRight.gameObject.SetActive(true);
 		isGrabbed = false;
+		// transform.parent = null;
 	}
 
 	public void GrabBegin()
@@ -105,6 +111,7 @@ public class PlayerGun : MonoBehaviour
 		ovrAvatar.HandRight.gameObject.SetActive(false);
 		isGrabbed = true;
 		isInOrder = false;
+		// transform.parent = ovrAvatar.transform;
 	}
 
 	void Shoot()
@@ -116,6 +123,7 @@ public class PlayerGun : MonoBehaviour
 		GameObject b = Instantiate( bulletPrefab, shootPos.position, shootPos.rotation );
 		b.GetComponent<TrailRenderer>().startColor = Color.red;
 		b.GetComponent<Bullet>().myOwner = gameObject;
+		b.layer = LayerMask.NameToLayer(bulletMask.ToString());
 		shootPos.GetComponent<ParticleSystem>().Play();
 	}
 }
