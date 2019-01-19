@@ -250,7 +250,6 @@
      <Compile Include="Assets\Scripts\Spawner.cs" />
      <Compile Include="Assets\Scripts\SpawnManager.cs" />
      <None Include="Assets\3rd-Party\Demigiant\DOTween\readme.txt" />
-     <None Include="Assets\Resources\empty.txt" />
      <None Include="Assets\OvrAvatar\Content\Materials\AvatarMaterialStateShader.cginc" />
      <None Include="Assets\OSPNative\THIRD_PARTY_NOTICES.txt" />
      <None Include="Assets\OVR\Resources\OVRMRUnlitTransparent.shader" />
@@ -259,10 +258,8 @@
      <None Include="Assets\Shaders\empty.txt" />
      <None Include="Assets\Scenes\Other\empty.txt" />
      <None Include="Assets\LICENSE.txt" />
-     <None Include="Assets\Audio\Music\empty.txt" />
      <None Include="Assets\OVR\Shaders\OVRColorRampAlpha.shader" />
      <None Include="Assets\OvrAvatar\Content\Materials\AvatarSurfaceShader.shader" />
-     <None Include="Assets\Animations\empty.txt" />
      <None Include="Assets\OvrAvatar\Content\Materials\AvatarSurfaceShaderSelfOccluding.shader" />
      <None Include="Assets\OVR\Resources\OVRMRUnlit.shader" />
      <None Include="Assets\Sandbox\empty.txt" />
